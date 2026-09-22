@@ -1,0 +1,51 @@
+<% content_for :title, "#{application_name} | Account" %>
+
+<section class="content-page" aria-labelledby="account-title">
+  <%= render "shared/page_header",
+        id: "account-title",
+        eyebrow: "Account",
+        title: "Account settings",
+        description: "These settings manage the email and password used to sign in. They do not attach a product workflow or profile data." %>
+
+  <%= form_with model: resource, as: resource_name, url: registration_path(resource_name), method: :put, class: "form-panel", data: { turbo: false } do |form| %>
+    <%= render "shared/form_errors", object: resource %>
+
+    <div class="form-field">
+      <%= form.label :email %>
+      <% email_help_id = form.field_id(:email, :hint) if resource.pending_reconfirmation? %>
+      <%= form.email_field :email, autocomplete: "email", required: true, **field_accessibility(form, :email, describedby: email_help_id) %>
+      <% if resource.pending_reconfirmation? %>
+        <p id="<%= email_help_id %>" class="field-help">Currently waiting for confirmation of <%= resource.unconfirmed_email %>.</p>
+      <% end %>
+      <%= render "shared/field_error", form: form, attribute: :email %>
+    </div>
+
+    <div class="form-field">
+      <%= form.label :password, "New password" %>
+      <p id="<%= form.field_id(:password, :hint) %>" class="field-help">Leave blank to keep your current password.<% if @minimum_password_length %> <%= @minimum_password_length %> characters minimum.<% end %></p>
+      <%= form.password_field :password,
+            autocomplete: "new-password",
+            **field_accessibility(form, :password, describedby: form.field_id(:password, :hint)) %>
+      <%= render "shared/field_error", form: form, attribute: :password %>
+    </div>
+
+    <div class="form-field">
+      <%= form.label :password_confirmation, "Confirm new password" %>
+      <%= form.password_field :password_confirmation, autocomplete: "new-password", **field_accessibility(form, :password_confirmation) %>
+      <%= render "shared/field_error", form: form, attribute: :password_confirmation %>
+    </div>
+
+    <div class="form-field">
+      <%= form.label :current_password %>
+      <p id="<%= form.field_id(:current_password, :hint) %>" class="field-help">Required to save account changes.</p>
+      <%= form.password_field :current_password,
+            autocomplete: "current-password",
+            **field_accessibility(form, :current_password, describedby: form.field_id(:current_password, :hint)) %>
+      <%= render "shared/field_error", form: form, attribute: :current_password %>
+    </div>
+
+    <div class="form-actions">
+      <%= form.submit "Save account" %>
+    </div>
+  <% end %>
+</section>

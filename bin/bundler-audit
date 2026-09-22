@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+require_relative "../config/boot"
+require "bundler/audit/cli"
+
+ARGV.concat %w[ check --update --database tmp/ruby-advisory-db ] if ARGV.empty?
+ARGV.concat %w[ --config config/bundler-audit.yml ] if ARGV.include?("check")
+Bundler::Audit::CLI.start

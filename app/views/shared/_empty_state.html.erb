@@ -1,0 +1,7 @@
+<section class="empty-state" aria-labelledby="<%= id %>">
+  <h2 id="<%= id %>"><%= title %></h2>
+  <p><%= description %></p>
+  <% if local_assigns[:action].present? %>
+    <div class="state-actions"><%= action %></div>
+  <% end %>
+</section>

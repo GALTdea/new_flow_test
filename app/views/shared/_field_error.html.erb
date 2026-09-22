@@ -1,0 +1,5 @@
+<% if form.object.errors[attribute].any? %>
+  <p id="<%= form.field_id(attribute, :error) %>" class="field-error">
+    <%= form.object.errors.full_messages_for(attribute).to_sentence %>
+  </p>
+<% end %>

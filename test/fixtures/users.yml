@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+confirmed:
+  email: alex@example.com
+  encrypted_password: <%= Devise::Encryptor.digest(User, "password123") %>
+  confirmed_at: <%= Time.current %>
+
+unconfirmed:
+  email: unconfirmed@example.com
+  encrypted_password: <%= Devise::Encryptor.digest(User, "password123") %>
+
+other:
+  email: other@example.com
+  encrypted_password: <%= Devise::Encryptor.digest(User, "password123") %>
+  confirmed_at: <%= Time.current %>

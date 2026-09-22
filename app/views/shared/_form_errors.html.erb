@@ -1,0 +1,12 @@
+<% if object.errors.any? %>
+  <% error_id = local_assigns.fetch(:id, "form-errors") %>
+  <% heading = local_assigns.fetch(:heading, "Please review the highlighted fields") %>
+  <section id="<%= error_id %>" class="form-errors" aria-labelledby="<%= error_id %>-title" role="alert">
+    <h2 id="<%= error_id %>-title"><%= heading %></h2>
+    <ul>
+      <% object.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </section>
+<% end %>

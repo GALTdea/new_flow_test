@@ -1,0 +1,67 @@
+<% content_for :title, "#{application_name} | UI showcase" %>
+
+<section class="content-page ui-showcase" aria-labelledby="ui-showcase-title">
+  <%= render "shared/page_header",
+        id: "ui-showcase-title",
+        eyebrow: "Development only",
+        title: "UI showcase",
+        description: "Canonical application primitives. Use these partials and classes before creating a new pattern." %>
+
+  <section class="ui-showcase__section" aria-labelledby="feedback-title">
+    <h2 id="feedback-title">Feedback</h2>
+    <div class="ui-showcase__examples">
+      <div class="ui-showcase__example">
+        <h3>Flash messages</h3>
+        <%= render "shared/flash_messages", messages: { notice: "Your changes were saved.", alert: "Please review the highlighted fields." } %>
+      </div>
+
+      <div class="ui-showcase__example">
+        <h3>Empty state</h3>
+        <%= render "shared/empty_state",
+              id: "example-empty-state-title",
+              title: "Nothing here yet",
+              description: "Use this when a collection is valid but has no records to show.",
+              action: link_to("Return home", root_path) %>
+      </div>
+
+      <div class="ui-showcase__example">
+        <h3>Error state</h3>
+        <%= render "shared/error_state",
+              id: "example-error-state-title",
+              title: "We could not load this information",
+              description: "Use this when a recoverable request failed and the person needs a clear next step.",
+              action: link_to("Return home", root_path) %>
+      </div>
+    </div>
+  </section>
+
+  <section class="ui-showcase__section" aria-labelledby="form-title">
+    <h2 id="form-title">Form feedback</h2>
+    <%= form_with model: @example_user, url: development_ui_path, method: :get, class: "form-panel" do |form| %>
+      <%= render "shared/form_errors", object: @example_user, id: "example-form-errors" %>
+
+      <div class="form-field">
+        <%= form.label :email %>
+        <p id="<%= form.field_id(:email, :hint) %>" class="field-help">Use a valid email address.</p>
+        <%= form.email_field :email, autocomplete: "email", **field_accessibility(form, :email, describedby: form.field_id(:email, :hint)) %>
+        <%= render "shared/field_error", form: form, attribute: :email %>
+      </div>
+
+      <div class="form-field">
+        <%= form.label :password %>
+        <p id="<%= form.field_id(:password, :hint) %>" class="field-help">Use at least 8 characters.</p>
+        <%= form.password_field :password, autocomplete: "new-password", **field_accessibility(form, :password, describedby: form.field_id(:password, :hint)) %>
+        <%= render "shared/field_error", form: form, attribute: :password %>
+      </div>
+
+      <div class="choice">
+        <%= form.check_box :remember_me %>
+        <%= form.label :remember_me, "Example checkbox pattern" %>
+      </div>
+
+      <div class="form-actions">
+        <%= form.submit "Primary action" %>
+      </div>
+    <% end %>
+  </section>
+</section>

@@ -1,0 +1,95 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "optparse"
+
+class ApplicationRenamer
+  TARGETS = {
+    "config/application.rb" => %w[StarterApp Starter\ App],
+    "config/database.yml" => %w[starter_app STARTER_APP],
+    "config/deploy.yml" => %w[starter_app],
+    "Dockerfile" => %w[starter_app Starter\ App]
+  }.freeze
+
+  def initialize(argv, root: File.expand_path("..", __dir__))
+    @argv = argv
+    @root = root
+    @options = { dry_run: false }
+  end
+
+  def run
+    parse_options
+    validate_options
+
+    changes = planned_changes
+    abort "No Starter App identifiers were found. This command only initializes an unrenamed copy." if changes.empty?
+
+    print_plan(changes)
+    return if @options[:dry_run]
+
+    changes.each { |path, content, _count| File.write(path, content) }
+    puts "\nRenamed application configuration. Next, replace starter-specific product documentation, create fresh credentials, and run bin/setup --skip-server."
+  end
+
+  private
+
+  def parse_options
+    OptionParser.new do |parser|
+      parser.banner = "Usage: bin/rename_app --name \"Product Name\" --identifier product_name [--module ProductName] [--dry-run]"
+
+      parser.on("--name NAME", "User-facing application name") { |value| @options[:name] = value }
+      parser.on("--identifier IDENTIFIER", "Lowercase snake_case operational identifier") { |value| @options[:identifier] = value }
+      parser.on("--module NAME", "Ruby application module (defaults from --identifier)") { |value| @options[:module_name] = value }
+      parser.on("--dry-run", "Show planned changes without writing files") { @options[:dry_run] = true }
+      parser.on("-h", "--help", "Show this help") do
+        puts parser
+        exit
+      end
+    end.parse!(@argv)
+
+    abort "Unexpected arguments: #{@argv.join(' ')}" if @argv.any?
+  end
+
+  def validate_options
+    @options[:name] = @options[:name].to_s.strip
+    @options[:identifier] = @options[:identifier].to_s
+    @options[:module_name] ||= @options[:identifier].split("_").map(&:capitalize).join
+
+    abort "--name is required" if @options[:name].empty?
+    abort "--name must be a single line" if @options[:name].include?("\n")
+    abort "--identifier must use lowercase snake_case" unless @options[:identifier].match?(/\A[a-z][a-z0-9]*(?:_[a-z0-9]+)*\z/)
+    abort "--module must be a Ruby constant name" unless @options[:module_name].match?(/\A[A-Z][A-Za-z0-9_]*\z/)
+  end
+
+  def planned_changes
+    TARGETS.filter_map do |relative_path, tokens|
+      path = File.join(@root, relative_path)
+      abort "Missing expected file: #{relative_path}" unless File.file?(path)
+
+      original = File.read(path)
+      updated = tokens.reduce(original) { |content, token| content.gsub(token, replacement_for(token)) }
+      replacement_count = tokens.sum { |token| original.scan(token).size }
+
+      [ path, updated, replacement_count ] if updated != original
+    end
+  end
+
+  def replacement_for(token)
+    case token
+    when "Starter App" then @options[:name]
+    when "StarterApp" then @options[:module_name]
+    when "starter_app" then @options[:identifier]
+    when "STARTER_APP" then @options[:identifier].upcase
+    end
+  end
+
+  def print_plan(changes)
+    heading = @options[:dry_run] ? "Would rename" : "Renaming"
+    puts "#{heading} Starter App to #{@options[:name]} (#{@options[:identifier]}, #{@options[:module_name]}):"
+    changes.each do |path, _content, replacement_count|
+      puts "  #{path.delete_prefix(@root + "/")} (#{replacement_count} replacement#{'s' unless replacement_count == 1})"
+    end
+  end
+end
+
+ApplicationRenamer.new(ARGV).run

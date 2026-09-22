@@ -1,0 +1,38 @@
+<% content_for :title, "#{application_name} | Sign in" %>
+
+<section class="content-page" aria-labelledby="sign-in-title">
+  <%= render "shared/page_header",
+        id: "sign-in-title",
+        eyebrow: "Account",
+        title: "Sign in",
+        description: "Use your #{application_name} account. This is identity only; it does not create a product record." %>
+
+  <%= form_with model: resource, as: resource_name, url: session_path(resource_name), class: "form-panel", data: { turbo: false } do |form| %>
+    <%= render "shared/form_errors", object: resource %>
+
+    <div class="form-field">
+      <%= form.label :email %>
+      <%= form.email_field :email, autofocus: true, autocomplete: "email", required: true, **field_accessibility(form, :email) %>
+      <%= render "shared/field_error", form: form, attribute: :email %>
+    </div>
+
+    <div class="form-field">
+      <%= form.label :password %>
+      <%= form.password_field :password, autocomplete: "current-password", required: true, **field_accessibility(form, :password) %>
+      <%= render "shared/field_error", form: form, attribute: :password %>
+    </div>
+
+    <% if devise_mapping.rememberable? %>
+      <div class="choice">
+        <%= form.check_box :remember_me %>
+        <%= form.label :remember_me, "Remember me on this device" %>
+      </div>
+    <% end %>
+
+    <div class="form-actions">
+      <%= form.submit "Sign in" %>
+    </div>
+  <% end %>
+
+  <%= render "users/shared/links" %>
+</section>

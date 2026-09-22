@@ -1,0 +1,39 @@
+<% content_for :title, "#{application_name} | Choose a new password" %>
+
+<section class="content-page" aria-labelledby="new-password-title">
+  <%= render "shared/page_header",
+        id: "new-password-title",
+        eyebrow: "Account",
+        title: "Choose a new password",
+        description: "This changes the password for your account only." %>
+
+  <%= form_with model: resource, as: resource_name, url: password_path(resource_name), method: :put, class: "form-panel" do |form| %>
+    <%= render "shared/form_errors", object: resource %>
+    <%= form.hidden_field :reset_password_token %>
+
+    <div class="form-field">
+      <%= form.label :password, "New password" %>
+      <% if @minimum_password_length %>
+        <p id="<%= form.field_id(:password, :hint) %>" class="field-help"><%= @minimum_password_length %> characters minimum.</p>
+      <% end %>
+      <%= form.password_field :password,
+            autofocus: true,
+            autocomplete: "new-password",
+            required: true,
+            **field_accessibility(form, :password, describedby: (@minimum_password_length ? form.field_id(:password, :hint) : nil)) %>
+      <%= render "shared/field_error", form: form, attribute: :password %>
+    </div>
+
+    <div class="form-field">
+      <%= form.label :password_confirmation, "Confirm new password" %>
+      <%= form.password_field :password_confirmation, autocomplete: "new-password", required: true, **field_accessibility(form, :password_confirmation) %>
+      <%= render "shared/field_error", form: form, attribute: :password_confirmation %>
+    </div>
+
+    <div class="form-actions">
+      <%= form.submit "Change password" %>
+    </div>
+  <% end %>
+
+  <%= render "users/shared/links" %>
+</section>

@@ -1,0 +1,13 @@
+<% if messages.any? %>
+  <div class="flash-messages">
+    <% messages.each do |type, message| %>
+      <% alert = type.to_s == "alert" %>
+      <%= tag.div(
+        message,
+        class: [ "flash-message", alert ? "flash-message--alert" : "flash-message--notice" ],
+        role: alert ? "alert" : "status",
+        aria: { atomic: true }
+      ) %>
+    <% end %>
+  </div>
+<% end %>

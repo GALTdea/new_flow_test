@@ -1,0 +1,30 @@
+<% content_for :title, "#{application_name} | Resend confirmation" %>
+
+<section class="content-page" aria-labelledby="resend-confirmation-title">
+  <%= render "shared/page_header",
+        id: "resend-confirmation-title",
+        eyebrow: "Account",
+        title: "Resend confirmation",
+        description: "Enter the email you used to create an account and we will send a new confirmation link if it matches." %>
+
+  <%= form_with model: resource, as: resource_name, url: confirmation_path(resource_name), method: :post, class: "form-panel" do |form| %>
+    <%= render "shared/form_errors", object: resource %>
+
+    <div class="form-field">
+      <%= form.label :email %>
+      <%= form.email_field :email,
+            autofocus: true,
+            autocomplete: "email",
+            required: true,
+            value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email),
+            **field_accessibility(form, :email) %>
+      <%= render "shared/field_error", form: form, attribute: :email %>
+    </div>
+
+    <div class="form-actions">
+      <%= form.submit "Resend confirmation instructions" %>
+    </div>
+  <% end %>
+
+  <%= render "users/shared/links" %>
+</section>

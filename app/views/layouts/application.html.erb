@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title><%= content_for(:title).presence || application_name %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="application-name" content="<%= application_name %>">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+
+    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="app-shell">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <header class="site-header" aria-label="<%= application_name %>">
+      <div class="site-header__content">
+        <p class="site-header__brand">
+          <%= link_to application_name, root_path, class: "site-header__brand-link" %>
+        </p>
+        <nav class="site-header__nav" aria-label="Account">
+          <% if Current.user %>
+            <%= link_to "Account", edit_user_registration_path, data: { turbo: false } %>
+            <%= button_to "Sign out",
+                  destroy_user_session_path,
+                  method: :delete,
+                  class: "site-header__sign-out",
+                  form_class: "site-header__sign-out-form",
+                  form: { data: { turbo: false } } %>
+          <% else %>
+            <%= link_to "Sign in", new_user_session_path, data: { turbo: false } %>
+            <%= link_to "Create account", new_user_registration_path, data: { turbo: false } %>
+          <% end %>
+        </nav>
+      </div>
+    </header>
+
+    <%= render "shared/flash_messages", messages: flash %>
+
+    <main id="main-content" class="app-main" tabindex="-1">
+      <div class="app-content">
+        <%= yield %>
+      </div>
+    </main>
+  </body>
+</html>

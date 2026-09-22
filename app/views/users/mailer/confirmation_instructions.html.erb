@@ -1,0 +1,5 @@
+<p>Welcome to <%= Rails.configuration.x.application_name %>.</p>
+
+<p>Confirm your email address with the link below. This account stores sign-in identity only.</p>
+
+<p><%= link_to "Confirm my account", confirmation_url(@resource, confirmation_token: @token) %></p>

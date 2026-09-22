@@ -1,0 +1,76 @@
+<% content_for :title, "#{application_name} | Home" %>
+
+<section class="page-hero" aria-labelledby="home-title">
+  <div class="page-intro">
+    <p class="eyebrow">Rails starter kit</p>
+    <h1 id="home-title">A ready application shell, not a blank generate.</h1>
+    <p class="page-summary">
+      This kit keeps the Rails 8 stack, accessible layout, and verification baseline so a
+      new product can start from a working app instead of a generated skeleton.
+    </p>
+  </div>
+
+  <aside class="page-notice" aria-labelledby="starter-status-title">
+    <h2 id="starter-status-title">Starter status</h2>
+    <p>
+      Rename the application, write product documents, and add the first vertical slice.
+      No domain workflow is included.
+    </p>
+  </aside>
+</section>
+
+<section class="page-section" aria-labelledby="included-title">
+  <div class="page-section__heading">
+    <p class="eyebrow">What is included</p>
+    <h2 id="included-title">Fundamentals that later screens can inherit.</h2>
+    <p>
+      Future pages should reuse this shell, the existing Rails mechanisms, and the
+      documented verification commands.
+    </p>
+  </div>
+
+  <ol class="page-steps">
+    <li class="page-step">
+      <span class="page-step__number" aria-hidden="true">1</span>
+      <div>
+        <h3>Application shell</h3>
+        <p>Skip link, landmarks, flash messages, identity-only account links, and a restrained Tailwind visual baseline.</p>
+      </div>
+    </li>
+    <li class="page-step">
+      <span class="page-step__number" aria-hidden="true">2</span>
+      <div>
+        <h3>Hotwire stack</h3>
+        <p>Server-rendered Rails with Turbo, Stimulus, import maps, Propshaft, and Tailwind CSS.</p>
+      </div>
+    </li>
+    <li class="page-step">
+      <span class="page-step__number" aria-hidden="true">3</span>
+      <div>
+        <h3>Verification</h3>
+        <p>Minitest, a root-page system journey, RuboCop, Brakeman, and GitHub Actions CI.</p>
+      </div>
+    </li>
+  </ol>
+</section>
+
+<section class="page-section page-section--split" aria-labelledby="next-step-title">
+  <div class="page-next-step">
+    <p class="eyebrow">Next step</p>
+    <h2 id="next-step-title">Rename this kit, then add product behavior.</h2>
+    <p>
+      Follow the README to change the display name, Ruby module, and database identifiers
+      before adding routes that belong to a specific product.
+    </p>
+    <span class="unavailable-action" aria-disabled="true">Product workflow is not included</span>
+  </div>
+
+  <div class="page-limitations">
+    <h2>What this starter does not include</h2>
+    <ul>
+      <li>It does not include authorization, roles, or OAuth.</li>
+      <li>It does not include a product domain model or workflow.</li>
+      <li>It does not treat the generated Kamal file as an approved production plan.</li>
+    </ul>
+  </div>
+</section>
